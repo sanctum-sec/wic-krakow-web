@@ -25,8 +25,124 @@ from flask import (
 
 BASE_DIR = Path(__file__).resolve().parent
 ARTIFACTS_DIR = Path(os.environ.get("ARTIFACTS_DIR", "/home/ubuntu/artifacts"))
+MATERIALS_DIR = Path(os.environ.get("MATERIALS_DIR", "/home/ubuntu/materials"))
 WORKSHOP_TITLE = "STEP UP 3! · Women's Cyber Defense Workshop"
 WORKSHOP_SUBTITLE = "Kraków · 21–23 April 2026"
+
+# ----- Course-materials index -----------------------------------------------
+# Layout on disk (under MATERIALS_DIR):
+#   modules/     ins_ukraine_stepUP_moduleNN_rev0(_ukr)?.pptx
+#   exercises/   player books (EN+UK), 03a xlsx/blanks
+#   answer-keys/ exercise0N answer-key group docs, json, xlsx
+#   printer/     master concatenated PDFs (EN + UK)
+#   sources/     CyOTE TRITON case study
+#
+# Titles are the facilitator's best reconstruction of each module's topic;
+# correct by editing this list. These are not hard-coded anywhere else.
+MODULE_META = [
+    {"num": "01", "title_en": "Informed Defensive Strategies — CTI foundations",
+     "title_uk": "Інформовані оборонні стратегії — основи CTI"},
+    {"num": "02", "title_en": "Attack Lifecycle & TTP Mapping",
+     "title_uk": "Життєвий цикл атаки та мапінг TTP"},
+    {"num": "03", "title_en": "Defending TTPs",
+     "title_uk": "Захист проти TTP"},
+    {"num": "04", "title_en": "AI-Augmented CTI",
+     "title_uk": "AI-підсилене CTI"},
+    {"num": "05", "title_en": "AI-Enhanced Attack Patterns",
+     "title_uk": "AI-підсилені патерни атак"},
+    {"num": "06", "title_en": "AI Social Engineering Defense",
+     "title_uk": "Захист від AI-соціальної інженерії"},
+]
+
+EXERCISE_META = [
+    {"num": "01", "title_en": "Case Study — TRITON / TRISIS",
+     "title_uk": "Кейс — TRITON / TRISIS",
+     "player_en": "ins_ukraine_stepUP_exercise01_playerBook_rev0.docx",
+     "player_uk": "ins_ukraine_stepUP_exercise01_playerBook_rev0_ukr.docx",
+     "answer_keys": [
+         "ins_ukraine_stepUP_exercise01_answerKey_group01_rev0.docx",
+         "ins_ukraine_stepUP_exercise01_answerKey_group02_rev0.docx",
+         "ins_ukraine_stepUP_exercise01_answerKey_group03_rev0.docx",
+         "ins_ukraine_stepUP_exercise01_answerKey_group04_rev0.docx",
+         "ins_ukraine_stepUP_exercise01_answerKey_group05_rev0.docx",
+     ]},
+    {"num": "02", "title_en": "Mapping TTPs with ATT&CK Navigator",
+     "title_uk": "Мапінг TTP у ATT&CK Navigator",
+     "player_en": "ins_ukraine_stepUP_exercise02_playerBook_rev1.docx",
+     "player_uk": "ins_ukraine_stepUP_exercise02_playerBook_rev1_ukr.docx",
+     "answer_keys": [
+         "ins_ukraine_stepUP_exercise02_answerKey_group01_rev0.docx",
+         "ins_ukraine_stepUP_exercise02_answerKey_group02_rev0.docx",
+         "ins_ukraine_stepUP_exercise02_answerKey_group03_rev0.docx",
+         "ins_ukraine_stepUP_exercise02_answerKey_group04_rev0.docx",
+         "ins_ukraine_stepUP_exercise02_answerKey_group05_rev0.docx",
+         "ins_ukraine_stepUP_exercise02_answerKey_part1+2.docx",
+         "ins_ukraine_stepUP_exercise02_answerKey_part1+2.xlsx",
+         "ins_ukraine_stepUP_exercise02_answerKey_part1+2.json",
+         "ins_ukraine_stepUP_exercise02_answerKey_part2.docx",
+     ]},
+    {"num": "03", "title_en": "Defending TTPs",
+     "title_uk": "Захист проти TTP",
+     "player_en": "ins_ukraine_stepUP_exercise03_playerBook_rev3.docx",
+     "player_uk": None,
+     "answer_keys": [
+         "ins_ukraine_stepUP_exercise03a_answerKey_class_rev0.docx",
+         "ins_ukraine_stepUP_exercise03b_answerKey_class_rev0.docx",
+         "ins_ukraine_stepUp_exercise3a_answer.xlsx",
+         "ins_ukraine_stepUp_exercise3a_blank.xlsx",
+         "ins_ukraine_stepUP_exercse3a.json",
+     ]},
+]
+
+PRINTER_BUNDLES = [
+    {"name": "Master presentations (EN, all 6 modules concatenated)",
+     "file": "ukraine_stepUP_master_presentations_01-06_rev0.pdf", "lang": "en"},
+    {"name": "Master player book (EN)",
+     "file": "ins_ukraine_stepUP_master_playerBook_rev0.pdf",      "lang": "en"},
+    {"name": "Зведений набір презентацій (UA, усі 6 модулів)",
+     "file": "ins_ukraine_stepUP_master_presentation_rev0_ukr.pdf", "lang": "uk"},
+    {"name": "Зведений player book (UA)",
+     "file": "ins_ukraine_stepUP_master_playerBook_rev0_ukr.pdf",  "lang": "uk"},
+]
+
+SOURCES = [
+    {"name": "CyOTE — TRITON / TRISIS case study",
+     "file": "CyOTE-Case-Study_TRITON.pdf",
+     "note_en": "Background reading for Exercise 01. Public DOE/CyOTE publication.",
+     "note_uk": "Додаткове читання до Вправи 01. Публічна публікація DOE/CyOTE."},
+]
+
+# Day-2 Jupyter-notebook bundles — not on disk here; already hosted in S3 public/.
+DAY2_BUNDLES = [
+    {"num": "00", "file": "00_Day_2_base.zip",
+     "size": "2.5 KB",
+     "purpose": "README + requirements + .vscode settings. EXTRACT FIRST.", "is_base": True},
+    {"num": "01", "file": "01_CTI_Module_1_-_Introduction_to_Threat_Intelligence.zip",
+     "size": "113 MB",
+     "purpose": "Module 1 — Introduction to Threat Intelligence"},
+    {"num": "02", "file": "02_CTI_Module_2_-_Cybersecurity_Frameworks_for_Threat_Intelligence.zip",
+     "size": "128 MB",
+     "purpose": "Module 2 — Cybersecurity Frameworks for Threat Intelligence"},
+    {"num": "03", "file": "03_CTI_Module_3_-_Threat_Actor_Tactics_Techniques_and_Procedures_TTPs.zip",
+     "size": "137 MB",
+     "purpose": "Module 3 — Threat Actor Tactics, Techniques, and Procedures (TTPs)"},
+    {"num": "04", "file": "04_CTI_Module_4_-_Identify_Actors_and_Techniques.zip",
+     "size": "133 MB",
+     "purpose": "Module 4 — Identify Actors and Techniques"},
+    {"num": "05", "file": "05_CTI_Module_5_-_Threat_Intelligence_Lifecycle.zip",
+     "size": "131 MB",
+     "purpose": "Module 5 — Threat Intelligence Lifecycle"},
+    {"num": "06", "file": "06_CTI_Module_6_-_Key_Threat_Intelligence_Sources.zip",
+     "size": "132 MB",
+     "purpose": "Module 6 — Key Threat Intelligence Sources"},
+    {"num": "07", "file": "07_CTI_Module_7_-_Understanding_Indicators_of_Compromise.zip",
+     "size": "126 MB",
+     "purpose": "Module 7 — Understanding Indicators of Compromise (IOCs)"},
+    {"num": "08", "file": "08_CTI_Module_8_-_Analyzing_Threat_Intelligence.zip",
+     "size": "134 MB",
+     "purpose": "Module 8 — Analyzing Threat Intelligence"},
+]
+DAY2_BUNDLES_S3_PREFIX = "https://wic-krakow-2026.s3.eu-central-1.amazonaws.com/public/day2-bundles/"
 
 BUCKET = "wic-krakow-2026"
 REGION = "eu-central-1"
@@ -318,6 +434,113 @@ def day3_exercise_uk():
         teams=TEAMS,
         protocol_url=PROTOCOL_REPO_URL,
     )
+
+
+def _material_file(subdir: str, filename: str | None) -> dict | None:
+    """Look up one material file on disk; return display metadata or None if missing."""
+    if not filename:
+        return None
+    fp = MATERIALS_DIR / subdir / filename
+    try:
+        size = fp.stat().st_size
+    except OSError:
+        return None
+    return {
+        "filename": filename,
+        "url": f"/materials/{subdir}/{filename}",
+        "size_h": fmt_size(size),
+        "kind": kind_label(filename),
+    }
+
+
+def discover_modules():
+    out = []
+    for m in MODULE_META:
+        en = _material_file("modules", f"ins_ukraine_stepUP_module{m['num']}_rev0.pptx")
+        uk = _material_file("modules", f"ins_ukraine_stepUP_module{m['num']}_rev0_ukr.pptx")
+        out.append({**m, "en": en, "uk": uk})
+    return out
+
+
+def discover_exercises():
+    out = []
+    for e in EXERCISE_META:
+        player_en = _material_file("exercises", e.get("player_en"))
+        player_uk = _material_file("exercises", e.get("player_uk"))
+        answer_keys = [f for f in (_material_file("answer-keys", k) for k in e.get("answer_keys", [])) if f]
+        # Some Ex03 files live under exercises/ — try that path as a fallback
+        supplementary = [f for f in (_material_file("exercises", k) for k in e.get("answer_keys", [])) if f]
+        out.append({
+            **e,
+            "player_en_meta": player_en,
+            "player_uk_meta": player_uk,
+            "answer_keys_meta": answer_keys,
+            "supplementary_meta": supplementary,
+        })
+    return out
+
+
+def discover_printer():
+    return [dict(b, meta=_material_file("printer", b["file"])) for b in PRINTER_BUNDLES]
+
+
+def discover_sources():
+    return [dict(s, meta=_material_file("sources", s["file"])) for s in SOURCES]
+
+
+@app.get("/materials")
+@auth_required
+def materials():
+    return render_template(
+        "materials.html",
+        title=WORKSHOP_TITLE,
+        modules=discover_modules(),
+        exercises=discover_exercises(),
+        printer=discover_printer(),
+        sources=discover_sources(),
+        day2_bundles=DAY2_BUNDLES,
+        day2_s3_prefix=DAY2_BUNDLES_S3_PREFIX,
+    )
+
+
+@app.get("/materials/uk")
+@auth_required
+def materials_uk():
+    return render_template(
+        "materials.uk.html",
+        title=WORKSHOP_TITLE,
+        modules=discover_modules(),
+        exercises=discover_exercises(),
+        printer=discover_printer(),
+        sources=discover_sources(),
+        day2_bundles=DAY2_BUNDLES,
+        day2_s3_prefix=DAY2_BUNDLES_S3_PREFIX,
+    )
+
+
+@app.get("/day2-bundles")
+@auth_required
+def day2_bundles_page():
+    # Faithful replica of the hmi-stepup3 /day-2-bundles page — same URLs, same structure,
+    # just served from wic-krakow-web so it survives the hmi-stepup3 tear-down.
+    return render_template(
+        "day2_bundles.html",
+        title=WORKSHOP_TITLE,
+        bundles=DAY2_BUNDLES,
+        s3_prefix=DAY2_BUNDLES_S3_PREFIX,
+    )
+
+
+@app.get("/materials/<subdir>/<path:filename>")
+@auth_required
+def material_download(subdir: str, filename: str):
+    if subdir.startswith(".") or ".." in subdir or subdir not in {"modules", "exercises", "answer-keys", "printer", "sources"}:
+        abort(404)
+    base = (MATERIALS_DIR / subdir).resolve()
+    if not base.is_dir():
+        abort(404)
+    as_attachment = request.args.get("download") == "1"
+    return send_from_directory(base, filename, as_attachment=as_attachment)
 
 
 @app.get("/artifacts/<session>/<path:filename>")

@@ -1,0 +1,188 @@
+/* WIC Kraków — Day 2 bundles distribution page */
+
+.wic-steps {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wic-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 10px 12px;
+  background: var(--panel-head);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+}
+
+.step-n {
+  min-width: 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #0b0d10;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-t {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.step-t b {
+  color: var(--amber);
+}
+
+.bundle-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.bundle-table thead th {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  font-weight: 600;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--panel-edge);
+  text-align: left;
+  background: var(--panel-head);
+}
+
+.bundle-table tbody td {
+  padding: 10px;
+  border-bottom: 1px solid var(--panel-edge);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.bundle-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.bundle-table tbody tr:hover td {
+  background: rgba(54, 211, 153, 0.04);
+}
+
+.row-base td {
+  background: rgba(255, 207, 75, 0.06);
+}
+
+.row-base:hover td {
+  background: rgba(255, 207, 75, 0.12) !important;
+}
+
+.col-n {
+  width: 40px;
+  color: var(--text-dim);
+}
+
+.col-name {
+  word-break: break-all;
+  max-width: 440px;
+  font-size: 12px;
+}
+
+.col-size {
+  white-space: nowrap;
+  color: var(--text-dim);
+  width: 80px;
+}
+
+.col-purpose {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.col-dl {
+  width: 100px;
+  text-align: right;
+}
+
+.dl-btn {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--accent);
+  color: #0b0d10;
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  border-radius: 3px;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.dl-btn:hover {
+  background: #4ee4a9;
+  transform: translateX(2px);
+}
+
+.dl-btn:active {
+  transform: translateX(0);
+}
+
+.bundle-foot {
+  padding-top: 12px;
+  margin-top: 10px;
+  border-top: 1px solid var(--panel-edge);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+.tshoot-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 900px) {
+  .tshoot-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.tshoot {
+  background: var(--panel-head);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  padding: 12px;
+}
+
+.tshoot-t {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.tshoot-b {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.foot-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+}
+
+.foot-link:hover {
+  color: var(--accent);
+}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WIC Kraków &mdash; Навчальні матеріали</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='hmi.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='wic_access.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='day3.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='day2_bundles.css') }}">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand">
+      <span class="dot"></span>
+      <span class="plant-name">STEP-UP 3 // НАВЧАЛЬНІ МАТЕРІАЛИ</span>
+    </div>
+    <div class="status-chips">
+      <span class="chip"><span class="led green"></span> КАТАЛОГ</span>
+      <span class="chip">МОДУЛІВ <b>{{ modules|length }}</b></span>
+      <span class="chip">ВПРАВ <b>{{ exercises|length }}</b></span>
+    </div>
+  </header>
+
+  <nav class="sub-nav">
+    <a href="/">⟵ Артефакти &amp; файли</a>
+    <a href="/materials/uk" class="active">Навчальні матеріали</a>
+    <a href="/day2-bundles">Day 2 bundles</a>
+    <a href="/wic-access-ghosttrace">Картки доступу ⟶</a>
+    <span class="lang-toggle">
+      <a href="/materials">EN</a>
+      <a class="active" href="/materials/uk">UK</a>
+    </span>
+  </nav>
+
+  <main class="wic-main">
+
+    <!-- INTRO -->
+    <div class="wic-intro">
+      <div class="panel-title">НАВЧАЛЬНІ МАТЕРІАЛИ &mdash; ДВОМОВНІ, ІНДЕКСОВАНІ ЗА МОДУЛЕМ</div>
+      <div class="wic-note">
+        Слайд-деки, player book вправ, answer keys, master print-bundles та source-референси зі STEP UP 3! workshop.
+        Згруповано за номером модуля (01&ndash;06), з англійською та українською версіями, де доступні.
+        Усе на цій сторінці за Basic Auth &mdash; Day 2 notebook-bundles (на S3) мають окрему сторінку для узгодженості з оригінальною дистрибуцією.
+      </div>
+    </div>
+
+    <!-- MODULES -->
+    <section class="panel">
+      <div class="panel-title">МОДУЛІ &mdash; СЛАЙД-ДЕКИ</div>
+      <table class="bundle-table">
+        <thead>
+          <tr>
+            <th class="col-n">#</th>
+            <th class="col-name">Тема</th>
+            <th class="col-size">EN (.pptx)</th>
+            <th class="col-size">UK (.pptx)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in modules %}
+          <tr>
+            <td class="col-n mono">{{ m.num }}</td>
+            <td class="col-purpose"><b>{{ m.title_uk }}</b></td>
+            <td class="col-size">
+              {% if m.en %}<a class="dl-btn" href="{{ m.en.url }}?download=1" download>GET &rarr; <span class="mono" style="font-size:10px; opacity:0.8">{{ m.en.size_h }}</span></a>{% else %}<span class="mono" style="color:#6b7885">—</span>{% endif %}
+            </td>
+            <td class="col-size">
+              {% if m.uk %}<a class="dl-btn" href="{{ m.uk.url }}?download=1" download>GET &rarr; <span class="mono" style="font-size:10px; opacity:0.8">{{ m.uk.size_h }}</span></a>{% else %}<span class="mono" style="color:#6b7885">—</span>{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- EXERCISES -->
+    <section class="panel">
+      <div class="panel-title">ВПРАВИ &mdash; PLAYER BOOK + ANSWER KEYS</div>
+      {% for e in exercises %}
+      <div style="margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--panel-edge);">
+        <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:8px;">
+          <span class="mono" style="font-size:20px; font-weight:700; color:var(--accent);">Впр {{ e.num }}</span>
+          <span style="font-size:14px; color:var(--text);"><b>{{ e.title_uk }}</b></span>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div>
+            <div class="wic-auth-title" style="font-size:10px;">PLAYER BOOK (EN)</div>
+            {% if e.player_en_meta %}
+              <a class="dl-btn" href="{{ e.player_en_meta.url }}?download=1" download>GET &rarr; <span class="mono" style="font-size:10px; opacity:0.8">{{ e.player_en_meta.size_h }}</span></a>
+            {% else %}<span class="mono" style="color:#6b7885">—</span>{% endif %}
+          </div>
+          <div>
+            <div class="wic-auth-title" style="font-size:10px;">PLAYER BOOK (UK)</div>
+            {% if e.player_uk_meta %}
+              <a class="dl-btn" href="{{ e.player_uk_meta.url }}?download=1" download>GET &rarr; <span class="mono" style="font-size:10px; opacity:0.8">{{ e.player_uk_meta.size_h }}</span></a>
+            {% else %}<span class="mono" style="color:#6b7885">не локалізовано</span>{% endif %}
+          </div>
+        </div>
+        {% if e.answer_keys_meta or e.supplementary_meta %}
+        <details style="margin-top:8px;">
+          <summary style="cursor:pointer; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim);">
+            Answer keys &amp; допоміжні матеріали ({{ (e.answer_keys_meta|length) + (e.supplementary_meta|length - (e.answer_keys_meta|length)) }} файлів)
+          </summary>
+          <ul style="list-style:none; padding:10px 0 0; margin:0; font-size:12px;">
+            {% for f in e.answer_keys_meta %}
+            <li style="padding:4px 0; border-bottom:1px dashed var(--panel-edge); display:flex; gap:10px; align-items:center;">
+              <a href="{{ f.url }}?download=1" download class="mono" style="color:var(--accent); flex:1; word-break:break-all; font-size:11px;">{{ f.filename }}</a>
+              <span class="mono" style="color:var(--text-dim); font-size:10px; white-space:nowrap;">{{ f.kind }} · {{ f.size_h }}</span>
+            </li>
+            {% endfor %}
+            {% for f in e.supplementary_meta if f.filename not in e.answer_keys_meta|map(attribute='filename')|list %}
+            <li style="padding:4px 0; border-bottom:1px dashed var(--panel-edge); display:flex; gap:10px; align-items:center;">
+              <a href="{{ f.url }}?download=1" download class="mono" style="color:var(--accent); flex:1; word-break:break-all; font-size:11px;">{{ f.filename }}</a>
+              <span class="mono" style="color:var(--text-dim); font-size:10px; white-space:nowrap;">{{ f.kind }} · {{ f.size_h }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </details>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </section>
+
+    <!-- DAY 2 BUNDLES (cross-link) -->
+    <section class="panel">
+      <div class="panel-title">DAY 2 &mdash; JUPYTER NOTEBOOK BUNDLES</div>
+      <div class="wic-note" style="margin-bottom:12px;">
+        Вісім CTI-модулів плюс базовий zip, ~1&nbsp;ГБ загалом.
+        Публічні на S3 (для самих zip-завантажень login не потрібен).
+        Окрема сторінка дистрибуції описує student workflow та troubleshooting.
+      </div>
+      <a class="wic-next-link" href="/day2-bundles" style="display:block; padding:16px 18px; background:var(--panel-head); border:1px solid var(--panel-edge); border-radius:4px; text-decoration:none; transition:border-color .15s;">
+        <div class="wic-next-label">ВІДКРИТИ &rarr;</div>
+        <div class="wic-next-title">DAY 2 BUNDLES &mdash; DISTRIBUTION PAGE</div>
+        <div class="wic-next-desc">{{ day2_bundles|length }} zip-ів, від <span class="inline-mono">00_Day_2_base.zip</span> до <span class="inline-mono">08_CTI_Module_8</span>.</div>
+      </a>
+    </section>
+
+    <!-- PRINTER BUNDLES -->
+    <section class="panel">
+      <div class="panel-title">MASTER PRINT BUNDLES</div>
+      <div class="wic-note" style="margin-bottom:12px;">
+        Усі модулі / всі player book-и зведені в одиночні PDF &mdash; для учасників, що воліють друкувати одним файлом, а не файл-за-файлом.
+      </div>
+      <table class="bundle-table">
+        <thead>
+          <tr>
+            <th class="col-name">Bundle</th>
+            <th class="col-size">Мова</th>
+            <th class="col-size">Розмір</th>
+            <th class="col-dl">Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in printer %}
+          <tr>
+            <td class="col-purpose">{{ p.name }}</td>
+            <td class="col-size mono" style="text-transform:uppercase;">{{ p.lang }}</td>
+            <td class="col-size mono">{% if p.meta %}{{ p.meta.size_h }}{% else %}—{% endif %}</td>
+            <td class="col-dl">
+              {% if p.meta %}<a class="dl-btn" href="{{ p.meta.url }}?download=1" download>GET &rarr;</a>{% else %}<span class="mono" style="color:#6b7885">—</span>{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SOURCES -->
+    <section class="panel">
+      <div class="panel-title">SOURCE-РЕФЕРЕНСИ</div>
+      {% for s in sources %}
+      <div style="display:flex; align-items:flex-start; gap:14px; padding:10px 0;">
+        <div style="flex:1;">
+          <div style="font-size:13px; color:var(--text); margin-bottom:4px;"><b>{{ s.name }}</b></div>
+          <div style="font-size:12px; color:var(--text-dim); line-height:1.6;">{{ s.note_uk }}</div>
+        </div>
+        <div>
+          {% if s.meta %}
+            <a class="dl-btn" href="{{ s.meta.url }}?download=1" download>GET &rarr; <span class="mono" style="font-size:10px; opacity:0.8">{{ s.meta.size_h }}</span></a>
+          {% else %}<span class="mono" style="color:#6b7885">—</span>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </section>
+
+  </main>
+
+  <footer class="foot-bar">
+    <span>STEP-UP 3 &bull; WIC KRAKÓW 2026 &bull; НАВЧАЛЬНІ МАТЕРІАЛИ</span>
+    <span><a href="/day2-bundles" class="foot-link">Day 2 bundles &rarr;</a></span>
+  </footer>
+</body>
+</html>

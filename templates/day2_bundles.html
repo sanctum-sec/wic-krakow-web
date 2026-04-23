@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WIC Kraków &mdash; Day 2 Student Bundles</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='hmi.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='wic_access.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='day2_bundles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='day3.css') }}">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand">
+      <span class="dot"></span>
+      <span class="plant-name">STEP-UP 3 // DAY 2 BUNDLES</span>
+    </div>
+    <div class="status-chips">
+      <span class="chip"><span class="led green"></span> DISTRIBUTION</span>
+      <span class="chip">BUNDLES <b>{{ bundles|length }}</b></span>
+      <span class="chip">CDN <b>S3 eu-central-1</b></span>
+    </div>
+  </header>
+
+  <nav class="sub-nav">
+    <a href="/">⟵ Artifacts &amp; Drops</a>
+    <a href="/materials">Course materials</a>
+    <a href="/day2-bundles" class="active">Day 2 bundles</a>
+    <a href="/wic-access-ghosttrace">Access cards ⟶</a>
+  </nav>
+
+  <main class="wic-main">
+    <div class="wic-intro">
+      <div class="panel-title">STUDENT FLOW &mdash; DAY 2 HANDS-ON</div>
+      <ol class="wic-steps">
+        <li>
+          <div class="step-n">1</div>
+          <div class="step-t">
+            Download <span class="inline-mono">00_Day_2_base.zip</span> (first row below) and extract it anywhere.
+            You now have a <span class="inline-mono">Day_2/</span> folder with the README, <span class="inline-mono">requirements.txt</span>, and VS Code config.
+          </div>
+        </li>
+        <li>
+          <div class="step-n">2</div>
+          <div class="step-t">
+            Follow the README inside <span class="inline-mono">Day_2/</span> to create the Python virtual environment and install packages (~2&ndash;3 minutes).
+          </div>
+        </li>
+        <li>
+          <div class="step-n">3</div>
+          <div class="step-t">
+            Download the module zip you are starting with and extract it <b>inside</b> the <span class="inline-mono">Day_2/</span> folder.
+          </div>
+        </li>
+        <li>
+          <div class="step-n">4</div>
+          <div class="step-t">
+            Open <span class="inline-mono">Day_2/</span> in VS Code, open the module's notebook, and select the <span class="inline-mono">cti-env</span> kernel.
+          </div>
+        </li>
+        <li>
+          <div class="step-n">5</div>
+          <div class="step-t">
+            Pull additional module zips as the class progresses &mdash; each extracts alongside the others into <span class="inline-mono">Day_2/</span>.
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <section class="panel">
+      <div class="panel-title">AVAILABLE BUNDLES</div>
+      <table class="bundle-table">
+        <thead>
+          <tr>
+            <th class="col-n">#</th>
+            <th class="col-name">File</th>
+            <th class="col-size">Size</th>
+            <th class="col-purpose">Purpose</th>
+            <th class="col-dl">Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in bundles %}
+          <tr class="{{ 'row-base' if b.is_base else '' }}">
+            <td class="col-n mono">{{ b.num }}</td>
+            <td class="col-name mono">{{ b.file }}</td>
+            <td class="col-size mono">{{ b.size }}</td>
+            <td class="col-purpose">{{ b.purpose }}</td>
+            <td class="col-dl">
+              <a class="dl-btn" href="{{ s3_prefix }}{{ b.file }}" download>GET &rarr;</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="bundle-foot">
+        Direct S3 URLs &mdash; no login required for the zip downloads themselves. Bundles live at
+        <span class="inline-mono">wic-krakow-2026.s3.eu-central-1.amazonaws.com/public/day2-bundles/</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">TROUBLESHOOTING</div>
+      <div class="tshoot-grid">
+        <div class="tshoot">
+          <div class="tshoot-t">DOWNLOAD STALLS OR FAILS</div>
+          <div class="tshoot-b">Retry the same URL &mdash; S3 serves bytes over HTTPS; a browser refresh usually resumes. Very large files (100&nbsp;MB+) are normal for these bundles.</div>
+        </div>
+        <div class="tshoot">
+          <div class="tshoot-t">EXTRACT FAILS ON WINDOWS</div>
+          <div class="tshoot-b">Windows built-in zip handles these files, but can fail on long paths. Use 7-Zip if the built-in tool errors. All bundles extract cleanly on macOS and Linux.</div>
+        </div>
+        <div class="tshoot">
+          <div class="tshoot-t">NOTEBOOK KERNEL NOT FOUND</div>
+          <div class="tshoot-b">In VS Code, open the Command Palette (<span class="inline-mono">Cmd/Ctrl+Shift+P</span>) &rarr; "Python: Select Interpreter" &rarr; pick the one inside <span class="inline-mono">Day_2/cti-env/</span>.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot-bar">
+    <span>STEP-UP 3 &bull; WIC KRAKÓW 2026 &bull; DAY 2 DISTRIBUTION</span>
+    <span><a href="/materials" class="foot-link">&larr; Course materials</a></span>
+  </footer>
+</body>
+</html>
