@@ -256,3 +256,7 @@ main.wrap { padding-top: 28px; padding-bottom: 48px; }
   border: 1px solid var(--line);
   padding: 1px 5px;
 }
+
+/* Project Hexsight banner: let the description span full width (override
+   the default 72ch cap used elsewhere) */
+.today-banner .block-sub { max-width: none; }
