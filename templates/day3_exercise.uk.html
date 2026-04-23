@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WIC Kraków — Командна вправа Дня 3</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='hmi.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='wic_access.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='day3.css') }}">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand">
+      <span class="dot"></span>
+      <span class="plant-name">STEP-UP 3 // WIC KRAKÓW 2026 // ДЕНЬ 3</span>
+    </div>
+    <div class="status-chips">
+      <span class="chip"><span class="led green"></span> СЬОГОДНІ</span>
+      <span class="chip">КОМАНД <b>{{ teams|length }}</b></span>
+      <span class="chip">РЕЖИМ <b>BUILD + INSPECT</b></span>
+    </div>
+  </header>
+
+  <nav class="sub-nav">
+    <a href="/">⟵ Артефакти &amp; файли</a>
+    <a href="/day3/uk" class="active">Вправа Дня 3</a>
+    <a href="/wic-access-ghosttrace">Картки доступу ⟶</a>
+    <span class="lang-toggle">
+      <a href="/day3">EN</a>
+      <a class="active" href="/day3/uk">UK</a>
+    </span>
+  </nav>
+
+  <main class="wic-main">
+
+    <!-- INTRO -->
+    <section class="d3-intro">
+      <div class="panel-title">СЬОГОДНІ — ПОБУДУВАТИ РОБОЧИЙ SOC ЗА ОДИН ДЕНЬ</div>
+      <div class="d3-intro-body">
+        <p>
+          Шість команд, один робочий Security Operations Center до кінця дня.
+          Пʼять команд будують по одному елементу SOC — сенсори, threat intelligence,
+          детекцію, hunting, реагування. Шоста команда інспектує решту пʼять на
+          відповідність контракту і виробляє <b>двомовні навчальні матеріали
+          (take-home)</b> — про те, <em>як</em> ви використовували AI для побудови
+          інфраструктури — щоб ви могли навчити колег у своєму HQ.
+        </p>
+        <p class="d3-intro-cta">
+          Кожна команда має щонайменше 2 вхідні і 1 вихідну інтеграцію. Сам ніхто не встигне.
+          Спочатку читайте спільний протокол, потім план своєї команди:
+          <a class="d3-link" href="{{ protocol_url }}" target="_blank">{{ protocol_url }}</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- TEAMS TABLE -->
+    <section class="d3-teams-wrap">
+      <div class="panel-title">ШІСТЬ КОМАНД</div>
+      <div class="d3-teams-table-wrap">
+        <table class="d3-teams">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Кодова назва</th>
+              <th>Роль</th>
+              <th>Lightsail</th>
+              <th>GitHub-репозиторій</th>
+              <th>Функціональна область MITRE</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for t in teams %}
+            <tr>
+              <td class="num">{{ t.num }}</td>
+              <td class="codename">
+                <b>{{ t.codename_uk }}</b> <span class="uk">{{ t.codename_en }}</span>
+                {% if t.tag %}<span class="tag-new">нова</span>{% endif %}
+              </td>
+              <td>{{ t.role_uk if t.role_uk else t.role }}</td>
+              <td class="mono">{{ t.host }}</td>
+              <td class="mono"><a href="{{ t.repo_url }}" target="_blank">{{ t.repo }}</a></td>
+              <td class="mitre">{{ t.mitre }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CHECKPOINTS -->
+    <section class="d3-timeline-wrap">
+      <div class="panel-title">ЧЕКПОІНТИ · 10:45 – 16:30</div>
+      <ol class="d3-timeline">
+        <li><span class="t">10:45 — 11:30</span><span class="what"><b>Kickoff (45 хв).</b> Фасилітатор проходить спільний протокол. Команди розбиваються, призначають ролі, стартують journal-ли (для Команди 6).</span></li>
+        <li><span class="t">11:30 — 12:30</span><span class="what"><b>Фази 1–2: скафолд + моки.</b> Кожна команда піднімає <code>/health</code> і mock-endpoint-и, щоб peer-и могли починати розробку проти вас.</span></li>
+        <li><span class="t">~12:30</span><span class="what"><b>Мок-чекпоінт.</b> Кожна команда має fake-but-reachable версію себе. Немає мока = блокуєш увесь воркшоп.</span></li>
+        <li><span class="t">12:30 — 13:15</span><span class="what"><b>Обід.</b> Перед виходом: commit, deploy, перевірте, що <code>/health</code> відповідає з публічного інтернету.</span></li>
+        <li><span class="t">13:15 — 14:45</span><span class="what"><b>Фази 3–4: справжні інструменти + інтеграція.</b> Заміщайте моки реальною логікою. Прокладайте peer-to-peer-виклики. Коміт кожні 30 хв.</span></li>
+        <li><span class="t">~14:45</span><span class="what"><b>Чекпоінт справжнього інструмента.</b> Real endpoint кожної команди приймає справжній трафік щонайменше від одного peer-а.</span></li>
+        <li><span class="t">14:45 — 15:45</span><span class="what"><b>Фаза 5: хардінг + адмін-сторінки.</b> Bearer auth, rate-limit, schema validation, admin-сторінка з ops + security events.</span></li>
+        <li><span class="t">15:45 — 16:10</span><span class="what"><b>Інтеграційне тренування + демо.</b> Фасилітатор запускає сценарну атаку через Пастку. Дашборд Диспетчера на проєкторі. Комплаєнс-дашборд Інспектора на екрані.</span></li>
+        <li><span class="t">16:10 — 16:30</span><span class="what"><b>Ретроспектива.</b> Одне здивування, одна складність, одне «зробив би інакше». Команда 6 презентує take-home навчальний пакет.</span></li>
+      </ol>
+    </section>
+
+    <!-- RULES -->
+    <section class="d3-rules-wrap">
+      <div class="panel-title">ЗОЛОТІ ПРАВИЛА (прочитайте спочатку)</div>
+      <ol class="d3-rules">
+        <li><b>Спочатку мок, потім реальне.</b> Немає мока = блокуєте всіх downstream.</li>
+        <li><b>Ваш інструмент теж є ціллю.</b> Кожна команда робить адмін-сторінку з security-event трекінгом, окрему від основної ops-сторінки.</li>
+        <li><b>Одна схема для всіх.</b> Додаткові поля — ок; відсутні обовʼязкові — ні.</li>
+        <li><b>Не передавайте секрети у промпти Claude.</b> Використовуйте env-змінні, посилайтеся на імʼя змінної, не її значення.</li>
+        <li><b>Health-endpoint у всіх.</b> <code>GET /health</code> → 200 з назвою інструмента.</li>
+        <li><b>Graceful-degrade на поганий вхід.</b> Залогуйте, відмовте, поверніть 400, працюйте далі.</li>
+        <li><b>Комітьте часто.</b> Кожні 30 хв, навіть якщо поламано. Git — ваша кнопка undo.</li>
+      </ol>
+    </section>
+
+    <!-- SHORTCUT LINKS -->
+    <section class="d3-links-wrap">
+      <div class="panel-title">ШВИДКІ ПОСИЛАННЯ</div>
+      <div class="d3-links-grid">
+        <a class="d3-link-card" href="{{ protocol_url }}" target="_blank">
+          <div class="d3-link-title">СПІЛЬНИЙ ПРОТОКОЛ</div>
+          <div class="d3-link-body mono">sanctum-sec/soc-protocol</div>
+        </a>
+        <a class="d3-link-card" href="/wic-access-ghosttrace">
+          <div class="d3-link-title">КАРТКИ ДОСТУПУ</div>
+          <div class="d3-link-body">Усі 6 Lightsail-креденшлів</div>
+        </a>
+        <a class="d3-link-card" href="/">
+          <div class="d3-link-title">АРТЕФАКТИ ВЧОРАШНЬОГО ДНЯ</div>
+          <div class="d3-link-body">Виходи сесій Дня 2 + file drops</div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot-bar">
+    <span>STEP-UP 3 &bull; WIC KRAKÓW 2026 &bull; ВПРАВА ДНЯ 3</span>
+    <span>BUILD WITH CLAUDE · INSPECT · TEACH</span>
+  </footer>
+</body>
+</html>

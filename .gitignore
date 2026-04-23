@@ -1,0 +1,26 @@
+# Secrets / config
+cards.json
+uploader.env
+*.env
+!*.env.example
+!cards.json.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+.pytest_cache/
+
+# macOS cruft
+.DS_Store
+._*
+
+# Editor
+.idea/
+.vscode/
+
+# Logs
+*.log
+logs/

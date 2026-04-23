@@ -1,0 +1,335 @@
+/* WIC Kraków access cards — extends style.css */
+
+.wic-main {
+  padding: 14px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.wic-intro {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 4px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.wic-note {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+}
+
+.wic-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+@media (min-width: 900px) {
+  .wic-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1400px) {
+  .wic-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.wic-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.wic-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--panel-head);
+  border-bottom: 1px solid var(--panel-edge);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
+.wic-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 30px;
+  text-align: center;
+  letter-spacing: 0;
+}
+
+.wic-name {
+  flex: 1;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.wic-led {
+  margin-left: auto;
+}
+
+.wic-card-body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wic-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0;
+  border-bottom: 1px dotted var(--panel-edge);
+}
+
+.wic-row:last-child {
+  border-bottom: none;
+}
+
+.wic-k {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  min-width: 95px;
+}
+
+.wic-v {
+  color: var(--text);
+  font-size: 15px;
+  word-break: break-all;
+}
+
+.mono {
+  font-family: "IBM Plex Mono", "Menlo", "Consolas", monospace;
+}
+
+.password-row {
+  padding-top: 8px;
+  margin-top: 4px;
+}
+
+.wic-pass {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 6px rgba(54, 211, 153, 0.25);
+}
+
+.wic-methods {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 4px;
+  padding: 14px;
+}
+
+.wic-methods-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .wic-methods-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.wic-method {
+  background: var(--panel-head);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  padding: 12px;
+}
+
+.wic-method-title {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.wic-method-body {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.wic-method-body i {
+  color: var(--amber);
+  font-style: normal;
+}
+
+/* Auth activation section */
+
+.wic-auth {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 4px;
+  padding: 14px;
+  margin-top: 14px;
+}
+
+.wic-auth-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+@media (min-width: 900px) {
+  .wic-auth-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.wic-auth-block {
+  background: var(--panel-head);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.wic-auth-title {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--panel-edge);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.wic-code {
+  margin: 0;
+  padding: 14px;
+  font-family: "IBM Plex Mono", "Menlo", "Consolas", monospace;
+  font-size: 13px;
+  color: var(--text);
+  background: #0b0d10;
+  border: none;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.6;
+}
+
+.wic-auth-foot {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--panel-edge);
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.inline-mono {
+  font-family: "IBM Plex Mono", "Menlo", "Consolas", monospace;
+  color: var(--accent);
+  background: rgba(54, 211, 153, 0.08);
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-size: 0.92em;
+}
+
+.wic-expiry-banner {
+  background: rgba(233, 75, 75, 0.12);
+  border: 1px solid var(--red);
+  color: var(--red);
+  padding: 10px 14px;
+  margin: 8px 0 14px;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 3px;
+}
+
+.wic-expiry-banner b {
+  color: var(--amber);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.wic-expiry-led {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+  animation: expiry-pulse 1.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes expiry-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Next-page call-to-action */
+
+.wic-next {
+  margin-top: 14px;
+}
+
+.wic-next-link {
+  display: block;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 18px 20px;
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  box-shadow: 0 0 12px rgba(54, 211, 153, 0.08);
+}
+
+.wic-next-link:hover {
+  background: rgba(54, 211, 153, 0.06);
+  border-color: #4ee4a9;
+  transform: translateY(-1px);
+  box-shadow: 0 0 18px rgba(54, 211, 153, 0.18);
+}
+
+.wic-next-label {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.wic-next-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.wic-next-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.wic-next-cta {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  color: var(--accent);
+  padding-top: 6px;
+  border-top: 1px dotted var(--panel-edge);
+  margin-top: 4px;
+}

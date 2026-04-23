@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WIC Kraków — Day 3 Team-Building Exercise</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='hmi.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='wic_access.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='day3.css') }}">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand">
+      <span class="dot"></span>
+      <span class="plant-name">STEP-UP 3 // WIC KRAKÓW 2026 // DAY 3</span>
+    </div>
+    <div class="status-chips">
+      <span class="chip"><span class="led green"></span> TODAY</span>
+      <span class="chip">TEAMS <b>{{ teams|length }}</b></span>
+      <span class="chip">MODE <b>BUILD + INSPECT</b></span>
+    </div>
+  </header>
+
+  <nav class="sub-nav">
+    <a href="/">⟵ Artifacts &amp; Drops</a>
+    <a href="/day3" class="active">Day 3 Exercise</a>
+    <a href="/wic-access-ghosttrace">Access Cards ⟶</a>
+    <span class="lang-toggle">
+      <a class="active" href="/day3">EN</a>
+      <a href="/day3/uk">UK</a>
+    </span>
+  </nav>
+
+  <main class="wic-main">
+
+    <!-- INTRO -->
+    <section class="d3-intro">
+      <div class="panel-title">TODAY — BUILD A WORKING SOC IN ONE DAY</div>
+      <div class="d3-intro-body">
+        <p>
+          Six teams, one working Security Operations Center by the end of the day.
+          Five teams each build one piece of the SOC — sensors, threat intelligence,
+          detection, hunting, response. A sixth team inspects the other five for
+          contract compliance and produces <b>take-home bilingual training
+          materials</b> on <em>how</em> you used AI to build the infrastructure,
+          so you can teach your colleagues back at HQ.
+        </p>
+        <p class="d3-intro-cta">
+          Every team has at least 2 inputs and 1 output. Nobody succeeds alone.
+          Read the shared protocol first, then your team's plan:
+          <a class="d3-link" href="{{ protocol_url }}" target="_blank">{{ protocol_url }}</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- TEAMS TABLE -->
+    <section class="d3-teams-wrap">
+      <div class="panel-title">THE SIX TEAMS</div>
+      <div class="d3-teams-table-wrap">
+        <table class="d3-teams">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Codename</th>
+              <th>Role</th>
+              <th>Lightsail</th>
+              <th>GitHub Repo</th>
+              <th>MITRE functional area</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for t in teams %}
+            <tr>
+              <td class="num">{{ t.num }}</td>
+              <td class="codename">
+                <b>{{ t.codename_en }}</b> <span class="uk">{{ t.codename_uk }}</span>
+                {% if t.tag %}<span class="tag-new">{{ t.tag }}</span>{% endif %}
+              </td>
+              <td>{{ t.role }}</td>
+              <td class="mono">{{ t.host }}</td>
+              <td class="mono"><a href="{{ t.repo_url }}" target="_blank">{{ t.repo }}</a></td>
+              <td class="mitre">{{ t.mitre }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CHECKPOINTS -->
+    <section class="d3-timeline-wrap">
+      <div class="panel-title">CHECKPOINTS · 10:45 – 16:30</div>
+      <ol class="d3-timeline">
+        <li><span class="t">10:45 — 11:30</span><span class="what"><b>Kickoff (45 min).</b> Facilitator walks through the shared protocol. Teams split, assign roles, start journals (Team 6).</span></li>
+        <li><span class="t">11:30 — 12:30</span><span class="what"><b>Phase 1–2: scaffold + mocks.</b> Each team stands up <code>/health</code> and mock endpoints so peers can start developing against you.</span></li>
+        <li><span class="t">~12:30</span><span class="what"><b>Mock-server checkpoint.</b> Every team has a fake-but-reachable version of itself up. No mock = you block the whole workshop.</span></li>
+        <li><span class="t">12:30 — 13:15</span><span class="what"><b>Lunch.</b> Before leaving: commit, deploy, confirm <code>/health</code> responds from the public internet.</span></li>
+        <li><span class="t">13:15 — 14:45</span><span class="what"><b>Phase 3–4: real tools + integration.</b> Replace mocks with real logic. Wire peer-to-peer calls. Commit every 30 min.</span></li>
+        <li><span class="t">~14:45</span><span class="what"><b>Real-tool checkpoint.</b> Every team's real endpoint accepts real traffic from at least one peer.</span></li>
+        <li><span class="t">14:45 — 15:45</span><span class="what"><b>Phase 5: harden + admin pages.</b> Bearer auth, rate limits, schema validation, admin page with ops + security events.</span></li>
+        <li><span class="t">15:45 — 16:10</span><span class="what"><b>Integration rehearsal + demo.</b> Facilitator fires scripted attack through Trap. Dispatcher's dashboard projected. Inspector's compliance dashboard on screen.</span></li>
+        <li><span class="t">16:10 — 16:30</span><span class="what"><b>Retrospective.</b> One surprise, one difficulty, one thing you'd do differently. Team 6 presents take-home training pack.</span></li>
+      </ol>
+    </section>
+
+    <!-- RULES -->
+    <section class="d3-rules-wrap">
+      <div class="panel-title">GOLDEN RULES (read these first)</div>
+      <ol class="d3-rules">
+        <li><b>Ship a mock before you ship the real thing.</b> No mock = you block everyone downstream.</li>
+        <li><b>Your tool is also a target.</b> Every team builds an admin page with security-event tracking, separate from its normal operational page.</li>
+        <li><b>One schema to rule them all.</b> Extra fields are fine; missing required fields are not.</li>
+        <li><b>Don't fetch secrets into Claude prompts.</b> Use env vars and reference the variable name, never the value.</li>
+        <li><b>Health endpoint on everything.</b> <code>GET /health</code> → 200 with your tool name.</li>
+        <li><b>Graceful-degrade on bad input.</b> Log it, reject it, return 400, keep running.</li>
+        <li><b>Commit often.</b> Every 30 minutes, even if broken. Git is your undo button.</li>
+      </ol>
+    </section>
+
+    <!-- SHORTCUT LINKS -->
+    <section class="d3-links-wrap">
+      <div class="panel-title">SHORTCUTS</div>
+      <div class="d3-links-grid">
+        <a class="d3-link-card" href="{{ protocol_url }}" target="_blank">
+          <div class="d3-link-title">SHARED PROTOCOL</div>
+          <div class="d3-link-body mono">sanctum-sec/soc-protocol</div>
+        </a>
+        <a class="d3-link-card" href="/wic-access-ghosttrace">
+          <div class="d3-link-title">ACCESS CARDS</div>
+          <div class="d3-link-body">All 6 Lightsail credentials</div>
+        </a>
+        <a class="d3-link-card" href="/">
+          <div class="d3-link-title">YESTERDAY'S ARTIFACTS</div>
+          <div class="d3-link-body">Day 2 session outputs + file drops</div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot-bar">
+    <span>STEP-UP 3 &bull; WIC KRAKÓW 2026 &bull; DAY 3 EXERCISE</span>
+    <span>BUILD WITH CLAUDE · INSPECT · TEACH</span>
+  </footer>
+</body>
+</html>

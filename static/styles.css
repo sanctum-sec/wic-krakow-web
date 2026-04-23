@@ -1,0 +1,225 @@
+/* ========================================================================
+   WIC Kraków 2026 — landing page styles
+   ======================================================================== */
+
+:root {
+  --bg:            #f6f7fb;
+  --panel:        #ffffff;
+  --ink:          #1d2433;
+  --ink-soft:     #4a5263;
+  --muted:        #6b7280;
+  --line:         #e5e7eb;
+  --line-soft:    #f0f1f5;
+  --accent:       #1d4ed8;        /* Ukrainian blue, shifted slightly darker for contrast */
+  --accent-soft:  #e0ecff;
+  --sun:          #facc15;        /* Ukrainian yellow */
+  --ok:           #16a34a;
+  --ok-soft:      #e8f5ec;
+  --err:          #b91c1c;
+  --err-soft:     #fde8e8;
+  --pending:      #92400e;
+  --pending-soft: #fff7e6;
+  --shadow-sm:    0 1px 2px rgba(20, 30, 60, .05);
+  --shadow-md:    0 4px 16px rgba(20, 30, 60, .08);
+  --radius:       10px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font: 15px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+code { font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: var(--line-soft); padding: 1px 6px; border-radius: 4px; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* ---- Header ---- */
+.page-header {
+  background: linear-gradient(180deg, #ffffff 0%, #f0f4fb 100%);
+  border-bottom: 1px solid var(--line);
+  padding: 28px 0 20px;
+}
+.titlebar { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.titlebar h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+.flagstripe {
+  display: inline-block; width: 44px; height: 14px; border-radius: 3px; overflow: hidden;
+  background: linear-gradient(180deg, var(--accent) 0 50%, var(--sun) 50% 100%);
+  box-shadow: var(--shadow-sm);
+}
+.subtitle { color: var(--muted); margin: 4px 0 16px; font-size: 14px; }
+.jump { display: flex; gap: 18px; flex-wrap: wrap; font-size: 14px; }
+.jump a {
+  color: var(--ink-soft); padding: 4px 10px; border-radius: 20px; background: var(--panel);
+  border: 1px solid var(--line);
+}
+.jump a:hover { text-decoration: none; border-color: var(--accent); color: var(--accent); }
+
+/* ---- Main blocks ---- */
+main.wrap { padding-top: 28px; padding-bottom: 48px; }
+.block { margin: 36px 0; }
+.block:first-of-type { margin-top: 8px; }
+.block-head { margin-bottom: 16px; }
+.block-head h2 {
+  font-size: 18px; margin: 0 0 6px; padding: 0 0 8px;
+  border-bottom: 2px solid var(--ink);
+}
+.block-sub { margin: 0; color: var(--ink-soft); font-size: 14px; max-width: 72ch; }
+.empty { color: var(--muted); font-style: italic; }
+
+/* ---- Session cards ---- */
+.sessions { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 780px) { .sessions { grid-template-columns: 1fr 1fr; } }
+
+.session-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .15s ease, transform .15s ease;
+}
+.session-card:hover { box-shadow: var(--shadow-md); }
+.session-head {
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.session-head h3 {
+  font-size: 16px; margin: 0; flex: 1 1 auto; color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.session-head .tag {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .04em;
+  background: var(--accent-soft); color: var(--accent);
+  padding: 2px 8px; border-radius: 20px; white-space: nowrap;
+}
+.session-head .counts { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.session-summary { margin: 4px 0 12px; color: var(--ink-soft); font-size: 14px; }
+
+.file-list { list-style: none; padding: 0; margin: 0; border-top: 1px dashed var(--line); }
+.file-list li {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center; gap: 10px;
+  padding: 6px 0; border-bottom: 1px dashed var(--line-soft);
+  font-size: 13px;
+}
+.file-list li:last-child { border-bottom: 0; }
+.file-list .file-name { color: var(--ink); word-break: break-all; }
+.file-list .file-name:hover { color: var(--accent); text-decoration: underline; }
+.file-list .file-kind {
+  font-size: 11px; color: var(--muted); background: var(--line-soft);
+  padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+}
+.file-list .file-size { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 12px; white-space: nowrap; }
+.file-list .file-download {
+  width: 22px; height: 22px; line-height: 20px; text-align: center;
+  color: var(--accent); border: 1px solid var(--line); border-radius: 4px;
+  transition: background .12s;
+}
+.file-list .file-download:hover { background: var(--accent-soft); text-decoration: none; }
+
+/* ---- Upload ---- */
+.drop {
+  border: 2px dashed #c3cde0; border-radius: 12px;
+  padding: 28px 20px; text-align: center; background: var(--panel);
+  cursor: pointer; transition: background .15s, border-color .15s;
+}
+.drop:hover { background: #fbfcff; }
+.drop.hover  { background: var(--accent-soft); border-color: var(--accent); }
+.drop-inner  { pointer-events: none; }    /* so clicks bubble to .drop */
+.drop-icon { font-size: 34px; color: var(--accent); margin-bottom: 6px; }
+.drop p { margin: 4px 0; color: var(--ink-soft); }
+.linkbtn {
+  background: none; border: 0; padding: 0; margin: 0;
+  color: var(--accent); text-decoration: underline; cursor: pointer;
+  font: inherit; pointer-events: auto;
+}
+
+.status { margin-top: 16px; }
+.status .line { padding: 7px 11px; margin: 4px 0; border-radius: 6px; font-size: 13px; }
+.status .ok      { background: var(--ok-soft);      color: var(--ok); }
+.status .err     { background: var(--err-soft);     color: var(--err); }
+.status .pending { background: var(--pending-soft); color: var(--pending); }
+
+/* ---- Drops table ---- */
+.drops { border-collapse: collapse; width: 100%; font-size: 13px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.drops th, .drops td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--line-soft); }
+.drops thead th { background: #f2f4f9; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-soft); }
+.drops tr:last-child td { border-bottom: 0; }
+.drops .size, .drops .when { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* ---- Footer ---- */
+.page-footer {
+  border-top: 1px solid var(--line);
+  padding: 18px 0;
+  color: var(--muted);
+  font-size: 12px;
+  background: var(--panel);
+}
+.page-footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.page-footer .dim { opacity: .7; }
+
+/* ------------------------------------------------------------------
+   Day 3 today-banner additions
+   ------------------------------------------------------------------ */
+
+.jump a.cta {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.jump a.cta:hover { background: #163eb0; color: #fff; text-decoration: none; }
+
+.today-banner {
+  background: linear-gradient(180deg, #fffef4 0%, #fff9d9 100%);
+  border: 1px solid #f0e2a0;
+  border-radius: var(--radius);
+  padding: 18px 20px 16px;
+  box-shadow: var(--shadow-sm);
+}
+.today-banner h2 { border-bottom-color: #d0a840; }
+.today-banner a { font-weight: 600; }
+
+.today-chips {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
+  margin-top: 14px;
+}
+@media (min-width: 640px) { .today-chips { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .today-chips { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1200px) { .today-chips { grid-template-columns: repeat(6, 1fr); } }
+
+.today-chip {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #eadfa8;
+  border-radius: 8px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: box-shadow .12s, transform .12s, border-color .12s;
+}
+.today-chip:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.today-chip-num {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.today-chip-name { font-size: 14px; color: var(--ink); }
+.today-chip-name .uk { color: var(--muted); font-weight: 400; margin-left: 4px; }
+.today-chip-host {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  color: var(--muted);
+}

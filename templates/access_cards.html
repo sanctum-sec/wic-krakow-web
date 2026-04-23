@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WIC Kraków — Access Cards</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='hmi.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='wic_access.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='day3.css') }}">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand">
+      <span class="dot"></span>
+      <span class="plant-name">STEP-UP 3 // WIC KRAKÓW 2026</span>
+    </div>
+    <div class="status-chips">
+      <span class="chip"><span class="led green"></span> WORKSHOP</span>
+      <span class="chip">REGION <b>EU-CENTRAL-1</b></span>
+      <span class="chip">INSTANCES <b>{{ cards|length }}</b></span>
+    </div>
+  </header>
+
+  <nav class="sub-nav">
+    <a href="/">⟵ Artifacts &amp; Drops</a>
+    <a href="/day3">Day 3 Exercise ⟶</a>
+    <a href="/wic-access-ghosttrace" class="active">Access Cards</a>
+  </nav>
+
+  <main class="wic-main">
+    <div class="wic-intro">
+      <div class="panel-title">STUDENT ACCESS CARDS</div>
+      <div class="wic-note">
+        Each card below corresponds to one workshop Lightsail instance. Sign in with your
+        assigned card using one of the listed access methods. Username is the same on every
+        instance; passwords are unique. Team 6 (Inspector) is new for today — it's the
+        regulatory-audit team that also produces take-home training materials.
+      </div>
+    </div>
+
+    <section class="wic-grid">
+      {% for c in cards %}
+      <div class="wic-card">
+        <div class="wic-card-head">
+          <span class="wic-num">{{ c.num }}</span>
+          <span class="wic-name">{{ c.name }}</span>
+          <span class="wic-led"><span class="led green"></span></span>
+        </div>
+        <div class="wic-card-body">
+          {% if c.role %}
+          <div class="wic-row role-row">
+            <div class="wic-k">ROLE</div>
+            <div class="wic-v">{{ c.role }}</div>
+          </div>
+          {% endif %}
+          <div class="wic-row">
+            <div class="wic-k">HOSTNAME</div>
+            <div class="wic-v mono">{{ c.hostname }}</div>
+          </div>
+          <div class="wic-row">
+            <div class="wic-k">IP</div>
+            <div class="wic-v mono">{{ c.ip }}</div>
+          </div>
+          <div class="wic-row">
+            <div class="wic-k">USERNAME</div>
+            <div class="wic-v mono">{{ c.username }}</div>
+          </div>
+          <div class="wic-row password-row">
+            <div class="wic-k">PASSWORD</div>
+            <div class="wic-v mono wic-pass">{{ c.password }}</div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </section>
+
+    <section class="wic-methods">
+      <div class="panel-title">ACCESS METHODS</div>
+      <div class="wic-methods-grid">
+        <div class="wic-method">
+          <div class="wic-method-title">BROWSER SSH</div>
+          <div class="wic-method-body">Sign in to the Lightsail console → click your instance → &ldquo;Connect using SSH&rdquo;. No local client required.</div>
+        </div>
+        <div class="wic-method">
+          <div class="wic-method-title">DIRECT SSH</div>
+          <div class="wic-method-body mono">ssh ubuntu@<i>wicNN</i>.sanctumsec.com<br>&#8627; enter password from card</div>
+        </div>
+        <div class="wic-method">
+          <div class="wic-method-title">VS CODE REMOTE-SSH</div>
+          <div class="wic-method-body mono">Host: ubuntu@<i>wicNN</i>.sanctumsec.com<br>&#8627; enter password when prompted</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wic-auth">
+      <div class="panel-title">GIT &amp; PUSH &mdash; NO GITHUB ACCOUNT NEEDED</div>
+      <div class="wic-note">
+        Your team's Lightsail has a deploy key pre-installed, pre-configured for SSH, and scoped to exactly your team's repo.
+        <b>No personal GitHub account, no public key, no private key to copy.</b>
+        Just SSH into your Lightsail and use <span class="inline-mono">git</span> normally &mdash; clone, commit, push &mdash; no prompts, no passwords.
+      </div>
+
+      <div class="wic-auth-grid">
+        <div class="wic-auth-block">
+          <div class="wic-auth-title">CLONE YOUR REPO (ON YOUR LIGHTSAIL)</div>
+<pre class="wic-code"># Team 1 &mdash; Trap
+git clone git@github.com:sanctum-sec/soc-day3-trap.git
+
+# Team 2 &mdash; Scout
+git clone git@github.com:sanctum-sec/soc-day3-scout.git
+
+# Team 3 &mdash; Analyst
+git clone git@github.com:sanctum-sec/soc-day3-analyst.git
+
+# Team 4 &mdash; Hunter
+git clone git@github.com:sanctum-sec/soc-day3-hunter.git
+
+# Team 5 &mdash; Dispatcher
+git clone git@github.com:sanctum-sec/soc-day3-dispatcher.git
+
+# Team 6 &mdash; Inspector
+git clone git@github.com:sanctum-sec/soc-day3-inspector.git</pre>
+        </div>
+        <div class="wic-auth-block">
+          <div class="wic-auth-title">COMMIT &amp; PUSH (NORMAL GIT)</div>
+<pre class="wic-code">cd soc-day3-&lt;team&gt;
+
+# Personalize your commits so teammates can see who did what
+git config user.name "Olha"
+git config user.email "olha@workshop.local"
+
+# Work, then ...
+git add .
+git commit -m "add honeypot HTTP endpoint"
+git push</pre>
+          <div class="wic-note" style="margin-top: 10px;">
+            The Lightsail's deploy key only has write access to <b>your team's</b> repo.
+            You literally cannot push to another team's repo by accident from your box &mdash; GitHub rejects the auth.
+          </div>
+        </div>
+      </div>
+
+      <div class="wic-auth-foot">
+        <b>Ukrainian character support:</b> <span class="inline-mono">git config</span> accepts UTF-8.
+        Commit messages in Ukrainian work fine &mdash; the commit log, GitHub UI, and everyone's <span class="inline-mono">git log</span> will render them correctly.
+      </div>
+    </section>
+
+    <section class="wic-auth">
+      <div class="panel-title">PAT ALTERNATIVE &mdash; FOR LAPTOP PUSH (OPTIONAL)</div>
+      <div class="wic-note">
+        If you really want to push from your laptop instead of the Lightsail, ask the instructor for a Personal Access Token (PAT).
+        Creating one takes ~2 minutes in the GitHub web UI; the instructor will paste the token here on the access-cards page when ready.
+        Then clone with:
+      </div>
+<pre class="wic-code">git clone https://&lt;PAT&gt;@github.com/sanctum-sec/soc-day3-&lt;team&gt;.git
+# or if you already cloned:
+git remote set-url origin https://&lt;PAT&gt;@github.com/sanctum-sec/soc-day3-&lt;team&gt;.git</pre>
+      <div class="wic-auth-foot">
+        The default &mdash; <b>work on your Lightsail</b> &mdash; is simpler, faster, and the way everything else on Day 3 assumes you're set up.
+      </div>
+    </section>
+
+    <section class="wic-auth">
+      <div class="panel-title">CLAUDE CODE &mdash; ALREADY AUTHENTICATED</div>
+      <div class="wic-note">
+        On every Lightsail above, Claude Code is pre-authenticated &mdash; just type
+        <span class="inline-mono">claude</span> and it works. The shared SOC-protocol
+        bearer token is pre-loaded in <span class="inline-mono">~/.soc_env</span>
+        and sourced on login.
+        <br><br>
+        If you installed Claude Code on your own laptop during Day 1, paste one line
+        into your shell config after the instructor shares the API key. Claude Code
+        picks it up silently &mdash; no prompt, no UI.
+      </div>
+
+      <div class="wic-auth-grid">
+        <div class="wic-auth-block">
+          <div class="wic-auth-title">MAC &mdash; TERMINAL (~/.zshrc)</div>
+<pre class="wic-code">echo 'export ANTHROPIC_API_KEY="sk-ant-..."' &gt;&gt; ~/.zshrc
+source ~/.zshrc</pre>
+        </div>
+        <div class="wic-auth-block">
+          <div class="wic-auth-title">WINDOWS &mdash; GIT BASH (~/.bashrc)</div>
+<pre class="wic-code">echo 'export ANTHROPIC_API_KEY="sk-ant-..."' &gt;&gt; ~/.bashrc
+source ~/.bashrc</pre>
+        </div>
+      </div>
+
+      <div class="wic-auth-foot">
+        Then run <span class="inline-mono">claude</span> &mdash; authenticated, no further setup.
+        Replace <span class="inline-mono">sk-ant-...</span> with the API key the instructor shares.
+      </div>
+    </section>
+
+    <section class="wic-next">
+      <a class="wic-next-link" href="/day3">
+        <div class="wic-next-label">NEXT &rarr;</div>
+        <div class="wic-next-title">DAY 3 &mdash; TEAM-BUILDING EXERCISE</div>
+        <div class="wic-next-desc">
+          The six-team build exercise: 5 teams build a working SOC, 1 team inspects it
+          and produces training artifacts to bring home. See team assignments, repos,
+          and the shared protocol.
+        </div>
+        <div class="wic-next-cta">OPEN EXERCISE PAGE &rarr;</div>
+      </a>
+    </section>
+  </main>
+
+  <footer class="foot-bar">
+    <span>STEP-UP 3 &bull; WIC KRAKÓW 2026 &bull; ACCESS CARDS</span>
+    <span>DO NOT SHARE OUTSIDE THE COHORT</span>
+  </footer>
+</body>
+</html>

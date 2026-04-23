@@ -1,0 +1,20 @@
+[
+  {
+    "num": "01",
+    "name": "wic-krakow-01",
+    "hostname": "wic01.example.com",
+    "ip": "192.0.2.1",
+    "username": "ubuntu",
+    "password": "set-me",
+    "role": "Team 1 — Trap (Пастка)"
+  },
+  {
+    "num": "02",
+    "name": "wic-krakow-02",
+    "hostname": "wic02.example.com",
+    "ip": "192.0.2.2",
+    "username": "ubuntu",
+    "password": "set-me",
+    "role": "Team 2 — Scout (Розвідник)"
+  }
+]

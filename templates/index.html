@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<header class="page-header">
+  <div class="wrap">
+    <div class="titlebar">
+      <h1>{{ title }}</h1>
+      <span class="flagstripe" aria-hidden="true"></span>
+    </div>
+    <p class="subtitle">{{ subtitle }}</p>
+    <nav class="jump">
+      <a href="/day3" class="cta">Day 3 Exercise →</a>
+      <a href="/wic-access-ghosttrace">Access Cards →</a>
+      <a href="#artifacts">Session artifacts</a>
+      <a href="#upload">Drop files</a>
+      <a href="#drops">Recent drops</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============================== TODAY (DAY 3) ============================== -->
+  <section id="today" class="block today-banner">
+    <div class="block-head">
+      <h2>Today — Day 3: team-building exercise</h2>
+      <p class="block-sub">
+        Six teams, one working SOC. Five teams build, one inspects and produces take-home training materials.
+        Each person's team assignment, Lightsail, and GitHub repo is on the
+        <a href="/day3">Day 3 exercise page</a>; SSH credentials are on the
+        <a href="/wic-access-ghosttrace">access cards page</a>.
+      </p>
+    </div>
+    <div class="today-chips">
+      {% for t in teams %}
+      <a class="today-chip" href="{{ t.repo_url }}" target="_blank">
+        <span class="today-chip-num">{{ t.num }}</span>
+        <span class="today-chip-name"><b>{{ t.codename_en }}</b> <span class="uk">{{ t.codename_uk }}</span></span>
+        <span class="today-chip-host">{{ t.host }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ============================== ARTIFACTS ============================== -->
+  <section id="artifacts" class="block">
+    <div class="block-head">
+      <h2>Session artifacts</h2>
+      <p class="block-sub">
+        Everything produced in today's Claude Code sessions — transcripts, handouts, lessons-learned, reference docs.
+        Click a file to view; append <code>?download=1</code> to force-download.
+      </p>
+    </div>
+
+    {% if sessions %}
+      <div class="sessions">
+        {% for s in sessions %}
+          <article class="session-card">
+            <header class="session-head">
+              <h3>{{ s.title }}</h3>
+              {% if s.tag %}<span class="tag">{{ s.tag }}</span>{% endif %}
+              <span class="counts">{{ s.file_count }} file{{ '' if s.file_count == 1 else 's' }} · {{ s.total_size_h }}</span>
+            </header>
+            {% if s.summary %}
+              <p class="session-summary">{{ s.summary }}</p>
+            {% endif %}
+            {% if s.files %}
+              <ul class="file-list">
+                {% for f in s.files %}
+                  <li>
+                    <a class="file-name" href="{{ url_for('artifact_download', session=s.slug, filename=f.name) }}">{{ f.name }}</a>
+                    <span class="file-kind">{{ f.kind }}</span>
+                    <span class="file-size">{{ f.size_h }}</span>
+                    <a class="file-download" href="{{ url_for('artifact_download', session=s.slug, filename=f.name) }}?download=1" title="Download">↓</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="empty">No files in this folder yet.</p>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty">No session artifacts have been staged on this instance yet.</p>
+    {% endif %}
+  </section>
+
+  <!-- ============================== UPLOAD ============================== -->
+  <section id="upload" class="block">
+    <div class="block-head">
+      <h2>Drop files</h2>
+      <p class="block-sub">
+        Anything you drop here lands in <code>s3://wic-krakow-2026/drops/&lt;date&gt;/</code> and any of the 5 student Lightsails can pull it from there.
+        Up to 100&nbsp;MB per file. Multiple files OK.
+      </p>
+    </div>
+
+    <div class="drop" id="drop">
+      <div class="drop-inner">
+        <div class="drop-icon" aria-hidden="true">⇡</div>
+        <p><b>Drag files here</b>, or <button type="button" id="pick-btn" class="linkbtn">click to browse</button></p>
+      </div>
+      <input type="file" id="picker" multiple hidden>
+    </div>
+
+    <div class="status" id="status"></div>
+  </section>
+
+  <!-- ============================== DROPS ============================== -->
+  <section id="drops" class="block">
+    <div class="block-head">
+      <h2>Recent drops</h2>
+      <p class="block-sub">The last 20 files uploaded. From the S3 bucket, not the web instance — lag is seconds.</p>
+    </div>
+
+    {% if drops %}
+      <table class="drops">
+        <thead><tr><th>File</th><th class="size">Size</th><th class="when">Uploaded</th></tr></thead>
+        <tbody>
+          {% for d in drops %}
+            <tr>
+              <td>{{ d.name }}</td>
+              <td class="size">{{ d.size_h }}</td>
+              <td class="when">{{ d.when }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="empty">No drops yet.</p>
+    {% endif %}
+  </section>
+
+</main>
+
+<footer class="page-footer">
+  <div class="wrap">
+    <span>WIC Kraków 2026 · internal workshop tooling</span>
+    <span class="dim">Landing served by <code>wic-uploader</code> on <code>wic-krakow-web</code>.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const drop   = document.getElementById('drop');
+  const picker = document.getElementById('picker');
+  const btn    = document.getElementById('pick-btn');
+  const status = document.getElementById('status');
+
+  btn.addEventListener('click', () => picker.click());
+  drop.addEventListener('click', (e) => { if (e.target === drop || e.target.classList.contains('drop-inner')) picker.click(); });
+  drop.addEventListener('dragover',  e => { e.preventDefault(); drop.classList.add('hover'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('hover'));
+  drop.addEventListener('drop', e => {
+    e.preventDefault();
+    drop.classList.remove('hover');
+    if (e.dataTransfer && e.dataTransfer.files) upload(e.dataTransfer.files);
+  });
+  picker.addEventListener('change', e => upload(e.target.files));
+
+  function line(cls, text) {
+    const el = document.createElement('div');
+    el.className = 'line ' + cls;
+    el.textContent = text;
+    status.prepend(el);
+    return el;
+  }
+
+  function upload(files) {
+    if (!files || !files.length) return;
+    for (const f of files) {
+      const kb = (f.size / 1024).toFixed(1);
+      const l = line('pending', `${f.name} (${kb} KB) — uploading…`);
+      const fd = new FormData();
+      fd.append('file', f);
+      fetch('/upload', { method: 'POST', body: fd })
+        .then(r => r.json().then(j => ({ok: r.ok, j})))
+        .then(({ok, j}) => {
+          if (ok) { l.className = 'line ok';  l.textContent = `${f.name} → ${j.key}`; }
+          else    { l.className = 'line err'; l.textContent = `${f.name} — ${j.error || 'failed'}`; }
+        })
+        .catch(e => { l.className = 'line err'; l.textContent = `${f.name} — ${e.message}`; });
+    }
+    // Reload so the "Recent drops" table refreshes after uploads finish.
+    setTimeout(() => location.reload(), 1500 + files.length * 500);
+  }
+})();
+</script>
+</body>
+</html>
