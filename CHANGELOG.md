@@ -18,6 +18,7 @@ All notable changes to this repository. Format based on [Keep a Changelog](https
 
 - Landing nav reordered: `Day 3 Exercise` → `Course materials` → `Day 2 bundles` → `Session artifacts` → `Access Cards`. Previously included `Drop files` and `Recent drops` — removed (workshop-era S3-upload flow, superseded by the Day-2 bundles page).
 - Landing page no longer renders the "Drop files" or "Recent drops" sections; the associated JavaScript is also gone.
+- Day-3 banner on the landing page renamed from "Today — Day 3: team-building exercise" to **"Project Hexsight"** (six sets of eyes, one field of view). Two earlier candidate names were dropped after conflict checks: *Operation Oberih* (clashes with "Оберіг" — Ukraine's state military-registration system, currently in the news), and *Operation Berehynia* (clashes with the Polish-Ukrainian Volhynia-victim exhumation mission). Lesson: stop reaching for Ukrainian cultural names.
 
 ### Removed
 
