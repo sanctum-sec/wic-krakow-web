@@ -4,6 +4,37 @@ All notable changes to this repository. Format based on [Keep a Changelog](https
 
 ---
 
+## [Unreleased] — 2026-04-23 (late)
+
+### Added
+
+- `/materials` (EN) and `/materials/uk` (UK) — bilingual course-materials pages with 6 modules, 3 exercises (with answer keys), master print bundles, and source references.
+- `/day2-bundles` — faithful replica of the `hmi-stepup3` page so the Day-2 notebook-zip distribution survives the HMI-server tear-down. Same 9 zips, same S3 URLs, same student-flow + troubleshooting copy.
+- `/materials/<subdir>/<path:filename>` — download route serving out of `/home/ubuntu/materials/` (228 MB of .pptx / .docx / .pdf content, gitignored).
+- `static/day2_bundles.css` and `templates/day2_bundles.html`, `templates/materials.html`, `templates/materials.uk.html`.
+- One new artifact in the shared-references session on the landing: `The_Fragile_Web.pptx` (10.5 MB) — external reading-list PowerPoint uploaded alongside the existing `Operating_in_International_Cyber_Waters.pptx`.
+
+### Changed
+
+- Landing nav reordered: `Day 3 Exercise` → `Course materials` → `Day 2 bundles` → `Session artifacts` → `Access Cards`. Previously included `Drop files` and `Recent drops` — removed (workshop-era S3-upload flow, superseded by the Day-2 bundles page).
+- Landing page no longer renders the "Drop files" or "Recent drops" sections; the associated JavaScript is also gone.
+
+### Removed
+
+- `/upload` POST route + `safe_name()` helper (the drag-drop upload endpoint). The `wic-krakow-2026/drops/` S3 prefix still exists with historical uploads but is no longer written to by this app.
+- `recent_drops()` S3-listing function and the `drops=[…]` argument passed to the landing template.
+- `app.config["MAX_CONTENT_LENGTH"]`, `MAX_BYTES`, `BUCKET`, `REGION`, `DROPS_PREFIX` constants and the `s3 = boto3.client(…)` instantiation — all unused after the `/upload` removal.
+- `boto3` and `re` imports — no longer referenced by anything in the app.
+- `jsonify` from the Flask imports — only the deleted `/upload` handler used it.
+
+### Notes
+
+- Module titles in `MODULE_META` are the facilitator's reconstruction from the slide-deck filenames; correct by editing that list if a proper title list becomes available.
+- Exercise 03 Ukrainian player book is not in the source tree; the page shows "not localized" for that row.
+- Materials files live on the server (`/home/ubuntu/materials/`), gitignored. Re-seed by syncing from `s3://wic-krakow-2026/private/materials-staging/` — a relay bucket used during the initial upload, now empty.
+
+---
+
 ## [post-workshop] — 2026-04-23
 
 Initial public archival of the workshop portal code. Everything below happened on

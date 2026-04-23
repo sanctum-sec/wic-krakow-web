@@ -1,19 +1,16 @@
-"""WIC Kraków 2026 — landing page + S3 uploader + access cards + Day 3 exercise page."""
+"""WIC Kraków 2026 — landing page + access cards + Day 3 exercise + course materials."""
 from __future__ import annotations
 
 import hmac
 import os
-import re
 from datetime import datetime, timezone
 from functools import wraps
 from pathlib import Path
 
-import boto3
 from flask import (
     Flask,
     Response,
     abort,
-    jsonify,
     render_template,
     request,
     send_from_directory,
@@ -144,12 +141,8 @@ DAY2_BUNDLES = [
 ]
 DAY2_BUNDLES_S3_PREFIX = "https://wic-krakow-2026.s3.eu-central-1.amazonaws.com/public/day2-bundles/"
 
-BUCKET = "wic-krakow-2026"
-REGION = "eu-central-1"
-DROPS_PREFIX = "drops/"
 AUTH_USER = "wic"
 AUTH_PASS = os.environ["UPLOADER_PASSWORD"]
-MAX_BYTES = 100 * 1024 * 1024
 
 # Access-cards data (contains instance passwords) is loaded from a sibling JSON
 # file that's gitignored. See cards.json.example for the expected structure.
@@ -241,19 +234,11 @@ SESSION_TAGS = {
 }
 
 app = Flask(__name__, template_folder=str(BASE_DIR / "templates"), static_folder=str(BASE_DIR / "static"))
-app.config["MAX_CONTENT_LENGTH"] = MAX_BYTES
-s3 = boto3.client("s3", region_name=REGION)
 
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-
-
-def safe_name(name: str) -> str:
-    name = os.path.basename(name or "")
-    name = re.sub(r"[^\w.\- ]", "_", name).strip()
-    return name[:200] or "file"
 
 
 def auth_required(f):
@@ -366,25 +351,6 @@ def discover_sessions():
     return sessions
 
 
-def recent_drops(limit: int = 20):
-    try:
-        resp = s3.list_objects_v2(Bucket=BUCKET, Prefix=DROPS_PREFIX, MaxKeys=200)
-    except Exception:
-        return []
-    items = []
-    for o in resp.get("Contents") or []:
-        items.append(
-            {
-                "name": o["Key"].replace(DROPS_PREFIX, "", 1),
-                "size_h": fmt_size(o["Size"]),
-                "when": o["LastModified"].astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
-                "mtime": o["LastModified"],
-            }
-        )
-    items.sort(key=lambda x: x["mtime"], reverse=True)
-    return items[:limit]
-
-
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
@@ -399,7 +365,6 @@ def index():
         title=WORKSHOP_TITLE,
         subtitle=WORKSHOP_SUBTITLE,
         sessions=sessions,
-        drops=recent_drops(),
         teams=TEAMS,
     )
 
@@ -554,24 +519,6 @@ def artifact_download(session: str, filename: str):
             abort(404)
     as_attachment = request.args.get("download") == "1"
     return send_from_directory(base, filename, as_attachment=as_attachment)
-
-
-@app.post("/upload")
-@auth_required
-def upload():
-    f = request.files.get("file")
-    if not f or not f.filename:
-        return jsonify(error="no file"), 400
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    key = f"{DROPS_PREFIX}{today}/{safe_name(f.filename)}"
-    try:
-        s3.upload_fileobj(
-            f, BUCKET, key,
-            ExtraArgs={"ContentType": f.mimetype or "application/octet-stream"},
-        )
-    except Exception as e:
-        return jsonify(error=str(e)), 500
-    return jsonify(ok=True, key=key)
 
 
 @app.get("/healthz")
